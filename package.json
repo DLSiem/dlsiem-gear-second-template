@@ -1,0 +1,37 @@
+{
+  "name": "dlsiem-gear-second-template",
+  "version": "1.0.4",
+  "description": "This is react postgress express nodejs tailwindcss typescript jwt authenticated fullstack template",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "dlsiem-gear-second-template": "./dist/create.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DLSiem/dlsiem-gear-second-template.git"
+  },
+  "files": [
+    "template"
+  ],
+  "keywords": [
+    "React",
+    "Template"
+  ],
+  "author": "D L Siem",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DLSiem/dlsiem-gear-second-template/issues"
+  },
+  "homepage": "https://github.com/DLSiem/dlsiem-gear-second-template#readme",
+  "dependencies": {
+    "typescript": "^5.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.5"
+  }
+}
