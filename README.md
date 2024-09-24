@@ -3,6 +3,6 @@
 ### Download
 
 ```
-npx dlsiem-gear-second-template <my-app>
+npx dlsiem-gear-second <my-app>
 cd my-app
 ```
