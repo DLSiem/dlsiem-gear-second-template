@@ -6,29 +6,37 @@ import bcrypt from "bcrypt";
 export const signInUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
-  console.log(email, password);
-
   if (!email || !password) {
     return res.status(400).send("Please provide email and password");
   }
   try {
     const findUser = await User.findOne({ where: { email } });
-    console.log("Tesgasg", findUser?.imageUrl);
+
     if (findUser) {
       const isMatch = await bcrypt.compare(password, findUser.password);
       if (!isMatch) {
-        return res.status(401).send("Invalid credentials");
+        return res.status(400).json({ message: "Invalid credentials" });
       }
 
       const token = generateToken(findUser.id);
+
       res.cookie("token", token);
-      return res.status(200).json({ message: "User Login Successsfully" });
+      const filerUser = {
+        id: findUser.id,
+        email: findUser.email,
+        username: findUser.username,
+        imageUrl: findUser.imageUrl,
+        role: findUser.role,
+      };
+      return res
+        .status(200)
+        .json({ message: "User Login Successsfully", user: filerUser });
     } else {
-      res.status(401).json("Invalid credentials");
+      res.status(401).append("errorMassage", "Invalid credentials").send();
     }
   } catch (error) {
     console.log(error);
-    res.status(500).send("Server Error");
+    res.status(500).json("Server Error");
   }
 };
 export const signUpUser = async (req: Request, res: Response) => {
