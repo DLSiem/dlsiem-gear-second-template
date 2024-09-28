@@ -98,6 +98,11 @@ const authSlice = createSlice({
       .addCase(signIn.rejected, (state) => {
         state.status = "failed";
       })
+      .addCase(signUp.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.isAuthenticated = true;
+        state.currentUser = action.payload;
+      })
       .addCase(verifyToken.pending, (state) => {
         state.status = "loading";
       })

@@ -74,21 +74,28 @@ export const signUpUser = async (req: Request, res: Response) => {
   try {
     const findOne = await User.findOne({ where: { email } });
     if (findOne) {
-      return res.status(400).send("User already exist");
+      return res.status(400).json({ message: "User already exists" });
     }
     const user = await User.create({ email, password });
-    console.log("user", user);
     const token = generateToken(user.dataValues.id);
     res.cookie("token", token);
-    return res.status(201).json({ message: "User created successfully", user });
+    const filerUser = {
+      id: user.id,
+      email: user.email,
+      username: user.username,
+      imageUrl: user.imageUrl,
+      role: user.role,
+    };
+    return res
+      .status(201)
+      .json({ message: "User created successfully", user: filerUser });
   } catch (error) {
     console.log(error);
-    res.status(500).send("Server Error");
+    res.status(500).json({ message: "Server Error" });
   }
 };
 
 export const signOutUser = async (req: Request, res: Response) => {
-  // Clear cookie
   res.clearCookie("token").status(200).json({ message: "User logged out" });
 };
 
