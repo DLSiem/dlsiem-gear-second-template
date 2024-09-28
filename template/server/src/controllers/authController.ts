@@ -59,7 +59,7 @@ export const signInUser = async (req: Request, res: Response) => {
         .status(200)
         .json({ message: "User Login Successsfully", user: filerUser });
     } else {
-      res.status(401).append("errorMassage", "Invalid credentials").send();
+      res.status(401).json({ message: "User not found!" });
     }
   } catch (error) {
     console.log(error);
