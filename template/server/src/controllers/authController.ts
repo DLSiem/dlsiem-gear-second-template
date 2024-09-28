@@ -2,6 +2,33 @@ import { Request, Response } from "express";
 import User from "../db/models/user";
 import generateToken from "../utils/genetateToken";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+export const verifyToken = async (req: Request, res: Response) => {
+  let token;
+
+  try {
+    token = req.cookies.token;
+    console.log("token", token);
+    const decode: any = jwt.verify(token, process.env.JWT_SECRET as string);
+    console.log("decode", decode);
+    const user = await User.findByPk(decode.id);
+    if (user) {
+      const filerUser = {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        imageUrl: user.imageUrl,
+        role: user.role,
+      };
+      res.status(200).json({ message: "Authorized", user: filerUser });
+    } else {
+      return res.status(401).json({ message: "User not found" });
+    }
+  } catch (error) {
+    return res.status(401).json({ message: "Not authorized, token failed" });
+  }
+};
 
 export const signInUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;

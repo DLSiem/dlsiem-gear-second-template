@@ -22,6 +22,7 @@ export const protectedRoute = async (
     const user = await User.findByPk(decode.id);
     if (user) {
       req.user = user;
+      res.status(200).json({ message: "Authorized" });
     } else {
       return res.status(401).json({ message: "User not found" });
     }

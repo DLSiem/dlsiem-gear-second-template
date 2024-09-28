@@ -3,7 +3,8 @@ import Counter from "./features/counter/Counter";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RootLayout, NotFoundPage } from "./components";
 
-import { Signin, Signup } from "./features/auth";
+import { Signin, Signup, ProtectedRoutes } from "./features/auth";
+import { Dashboard } from "./features/users";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,18 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Counter />,
+      },
+      {
+        path: "about",
+        element: <div>About</div>,
+      },
+      {
+        path: "dashboard",
+        element: (
+          <ProtectedRoutes>
+            <Dashboard />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "auth",
