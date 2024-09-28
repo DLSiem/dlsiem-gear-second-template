@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RootLayout, NotFoundPage } from "./components";
 
 import { Signin, Signup, ProtectedRoutes } from "./features/auth";
-import { Dashboard } from "./features/users";
+import { Dashboard, UsersList, SingleUserPage } from "./features/users";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +15,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Counter />,
+      },
+      {
+        path: "users",
+        element: <UsersList />,
+      },
+      {
+        path: "users/:userId",
+        element: <SingleUserPage />,
       },
       {
         path: "about",

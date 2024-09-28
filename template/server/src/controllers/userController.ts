@@ -20,7 +20,16 @@ export const getUserById = async (req: Request, res: Response) => {
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
     const users = await User.findAll();
-    return res.status(200).json(users);
+    const filteredUsers = users.map((user) => {
+      return {
+        id: user.id,
+        email: user.email,
+        username: user.username,
+        imageUrl: user.imageUrl,
+        role: user.role,
+      };
+    });
+    return res.status(200).json(filteredUsers);
   } catch (error) {
     console.log(error);
     res.status(500).send("Server Error");

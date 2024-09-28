@@ -2,13 +2,17 @@ import { Action, configureStore, ThunkAction } from "@reduxjs/toolkit";
 import authSlice from "../features/auth/authSlice";
 import counterSlice from "../features/counter/counterSlice";
 import usersSlice from "../features/users/usersSlice";
+import { apiSlice } from "../features/api/apiSlice";
 
 export const store = configureStore({
   reducer: {
     auth: authSlice,
     counter: counterSlice,
     user: usersSlice,
+    [apiSlice.reducerPath]: apiSlice.reducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(apiSlice.middleware),
 });
 
 // Infer the type of store
