@@ -1,48 +1,15 @@
-import { Dialect } from "sequelize";
 import dotenv from "dotenv";
-
+import { Pool } from "pg";
 dotenv.config();
 
-interface DBConfig {
-  username: string;
-  password: string;
-  database: string;
-  host: string;
-  port: number;
-  dialect: Dialect;
-}
+const { DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, DB_PORT } = process.env;
 
-interface Config {
-  development: DBConfig;
-  test: DBConfig;
-  production: DBConfig;
-}
+const pool = new Pool({
+  user: DB_USERNAME,
+  password: DB_PASSWORD,
+  host: DB_HOST,
+  port: parseInt(DB_PORT!),
+  database: DB_NAME,
+});
 
-const config: Config = {
-  development: {
-    username: process.env.DB_USERNAME || "root",
-    password: process.env.DB_PASSWORD || "",
-    database: process.env.DB_NAME || "database",
-    host: process.env.DB_HOST || "localhost",
-    port: Number(process.env.DB_PORT) || 3306,
-    dialect: "postgres",
-  },
-  test: {
-    username: process.env.DB_USERNAME || "root",
-    password: process.env.DB_PASSWORD || "",
-    database: process.env.DB_NAME || "database",
-    host: process.env.DB_HOST || "localhost ",
-    port: Number(process.env.DB_PORT),
-    dialect: "postgres",
-  },
-  production: {
-    username: process.env.DB_USERNAME || "root",
-    password: process.env.DB_PASSWORD || "",
-    database: process.env.DB_NAME || "database",
-    host: process.env.DB_HOST || "localhost",
-    port: Number(process.env.DB_PORT),
-    dialect: "postgres",
-  },
-};
-
-export default config;
+export default pool;

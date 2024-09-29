@@ -1,8 +1,9 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import { sequelize } from "./db/models";
+
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import pool from "./config/config";
 
 dotenv.config();
 
@@ -21,17 +22,15 @@ app.use(
   })
 );
 
-sequelize
-  .sync()
-  .then(() => {
-    console.log("Database connected!");
-    app.listen(PORT, () => {
-      console.log(`Server is running on http://localhost:${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+app.listen(PORT, async () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+  try {
+    await pool.connect();
+    console.log("citext extension created");
+  } catch (error) {
+    console.error(error);
+  }
+});
 
 // routes
 import authRoutes from "./routes/authRoutes";
