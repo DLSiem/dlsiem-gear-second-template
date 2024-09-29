@@ -13,9 +13,8 @@
 
 1.  Express (Nodejs)
 2.  Postgres - Database
-3.  ORM - Sequelize
-4.  Typescript
-5.  JWT - Authentication
+3.  Typescript
+4.  JWT - Authentication
 
 ## Run in your local environment
 
