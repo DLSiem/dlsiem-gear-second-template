@@ -23,14 +23,16 @@ app.use(
 );
 
 app.listen(PORT, async () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
   try {
     await pool.connect();
-    console.log("citext extension created");
+    console.log(`Server is running on http://localhost:${PORT}`);
   } catch (error) {
     console.error(error);
   }
 });
+
+import User from "./db/models/user";
+// User.updateUserTable();
 
 // routes
 import authRoutes from "./routes/authRoutes";
