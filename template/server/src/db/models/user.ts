@@ -46,7 +46,6 @@ class User {
     const query = `INSERT INTO users (email,username , password) VALUES ($1, $2, $3) RETURNING user_id,username, email, imageUrl ;`;
     try {
       const res = await pool.query(query, [email, username, password]);
-      console.log(res);
       return {
         rowCount: res.rowCount || 0,
         message:
@@ -58,7 +57,9 @@ class User {
       return {
         rowCount: 0,
         message:
-          error.code === "23505" ? "User already exists" : "Server Error",
+          (error as any).code === "23505"
+            ? "User already exists"
+            : "Server Error",
         data: null,
       };
     }
@@ -79,7 +80,30 @@ class User {
       console.error(error);
       return {
         rowCount: 0,
-        message: error.code === "22P02" ? "Invalid user id" : "Server Error",
+        message:
+          (error as any).code === "22P02" ? "Invalid user id" : "Server Error",
+        data: null,
+      };
+    }
+  };
+
+  // get user by email
+  static getUserByEmail = async (email: string): Promise<UserResponse> => {
+    const query = `SELECT user_id,username,password ,email, imageUrl, role FROM users WHERE email = $1 ;`;
+    try {
+      const res = await pool.query(query, [email]);
+      return {
+        rowCount: res.rowCount || 0,
+        message:
+          res.rowCount === 0 ? "User not found" : "User fetch successfully",
+        data: res.rows,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        rowCount: 0,
+        message:
+          (error as any).code === "22P02" ? "Invalid user id" : "Server Error",
         data: null,
       };
     }
@@ -119,7 +143,8 @@ class User {
     } catch (error) {
       return {
         rowCount: 0,
-        message: error.code === "22P02" ? "Invalid user id" : "Server Error",
+        message:
+          (error as any).code === "22P02" ? "Invalid user id" : "Server Error",
         data: null,
       };
     }
@@ -167,7 +192,8 @@ class User {
     } catch (error) {
       return {
         rowCount: 0,
-        message: error.code === "23514" ? "Invalid role" : "Server Error",
+        message:
+          (error as any).code === "23514" ? "Invalid role" : "Server Error",
         data: null,
       };
     }
