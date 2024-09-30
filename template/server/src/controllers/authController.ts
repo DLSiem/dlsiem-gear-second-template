@@ -7,15 +7,23 @@ import jwt from "jsonwebtoken";
 export const verifyToken = async (req: Request, res: Response) => {
   try {
     const token = req.cookies.token;
-    console.log("token", token);
     const decode: any = jwt.verify(token, process.env.JWT_SECRET as string);
-    console.log("decode", decode);
     const { id } = decode;
     const response = await User.getUserById(id);
+    const user = response.data[0];
+    const filterUser = {
+      user_id: user.user_id,
+      username: user.username,
+      email: user.email,
+      imageUrl: user.imageurl,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
+    };
+
     if (response.rowCount > 0) {
       return res.status(200).json({
         message: "User verified",
-        data: response.data,
+        data: filterUser,
         rowCount: response.rowCount,
       });
     } else {
@@ -28,6 +36,7 @@ export const verifyToken = async (req: Request, res: Response) => {
 
 export const signInUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  console.log(email, password);
 
   if (!email || !password) {
     return res.status(400).send("Please provide email and password");
@@ -48,16 +57,18 @@ export const signInUser = async (req: Request, res: Response) => {
       res.status(401).json({ message: "Invalid credentials" });
     }
     const token = generateToken(response.data[0].user_id);
-
+    const user = response.data[0];
+    const filterUser = {
+      user_id: user.user_id,
+      username: user.username,
+      email: user.email,
+      imageUrl: user.imageurl,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
+    };
     const filterResponse = {
       message: "User signed in successfully",
-      data: {
-        id: response.data[0].user_id,
-        email: response.data[0].email,
-        username: response.data[0].username,
-        imageUrl: response.data[0].imageUrl,
-        role: response.data[0].role,
-      },
+      data: filterUser,
       rowCount: response.rowCount,
     };
     res.cookie("token", token);
@@ -86,9 +97,26 @@ export const signUpUser = async (req: Request, res: Response) => {
       username,
       hashedPassword
     );
+    const user = createUserRes.data[0];
+    const filterUser = {
+      user_id: user.user_id,
+      username: user.username,
+      email: user.email,
+      imageUrl: user.imageurl,
+      created_at: user.created_at,
+      updated_at: user.updated_at,
+    };
+    if (createUserRes.rowCount === 0) {
+      return res.status(400).json({ message: "User not created" });
+    }
+    const data = {
+      message: "User created successfully",
+      data: filterUser,
+      rowCount: createUserRes.rowCount,
+    };
     const token = generateToken(createUserRes.data[0].user_id);
     res.cookie("token", token);
-    return res.status(201).json(createUserRes);
+    return res.status(201).json(data);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server Error" });

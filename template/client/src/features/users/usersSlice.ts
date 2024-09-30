@@ -4,7 +4,7 @@ import { createAppAsyncThunk } from "../../app/withTyps";
 type UserRole = "admin" | "user" | "staff";
 
 export interface UserState {
-  id: number;
+  user_id: string;
   username: string;
   email: string;
   imageUrl: string;

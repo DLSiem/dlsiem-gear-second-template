@@ -18,7 +18,7 @@ export const signIn = createAppAsyncThunk(
         form,
         { withCredentials: true }
       );
-      return response.data.user;
+      return response.data.data;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -36,7 +36,7 @@ export const signUp = createAppAsyncThunk(
         form,
         { withCredentials: true }
       );
-      return response.data.user;
+      return response.data.data;
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -62,8 +62,7 @@ export const verifyToken = createAppAsyncThunk("auth/verifyToken", async () => {
     const response = await axios.get("http://localhost:5000/auth/verify", {
       withCredentials: true,
     });
-
-    return response.data.user;
+    return response.data.data;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     throw new Error(error.response.data.message ?? "Failed to verify token");

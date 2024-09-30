@@ -10,7 +10,6 @@ export const protectedRoute = async (
   next: NextFunction
 ) => {
   let token;
-
   try {
     token = req.cookies.token;
     console.log("token", token);

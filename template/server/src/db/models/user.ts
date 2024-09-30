@@ -43,7 +43,7 @@ class User {
     username: string,
     password: string
   ): Promise<UserResponse> => {
-    const query = `INSERT INTO users (email,username , password) VALUES ($1, $2, $3) RETURNING user_id,username, email, imageUrl ;`;
+    const query = `INSERT INTO users (email,username , password) VALUES ($1, $2, $3) RETURNING *;`;
     try {
       const res = await pool.query(query, [email, username, password]);
       return {
@@ -67,7 +67,7 @@ class User {
 
   // get user by id
   static getUserById = async (user_id: string): Promise<UserResponse> => {
-    const query = `SELECT user_id,username, email, imageUrl FROM users WHERE user_id = $1 ;`;
+    const query = `SELECT user_id,username, email, imageUrl,created_at, updated_at FROM users WHERE user_id = $1 ;`;
     try {
       const res = await pool.query(query, [user_id]);
       return {
@@ -89,7 +89,7 @@ class User {
 
   // get user by email
   static getUserByEmail = async (email: string): Promise<UserResponse> => {
-    const query = `SELECT user_id,username,password ,email, imageUrl, role FROM users WHERE email = $1 ;`;
+    const query = `SELECT * FROM users WHERE email = $1 ;`;
     try {
       const res = await pool.query(query, [email]);
       return {
