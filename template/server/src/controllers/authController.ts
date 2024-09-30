@@ -5,13 +5,13 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 export const verifyToken = async (req: Request, res: Response) => {
-  let token;
   try {
-    token = req.cookies.token;
+    const token = req.cookies.token;
     console.log("token", token);
     const decode: any = jwt.verify(token, process.env.JWT_SECRET as string);
     console.log("decode", decode);
-    const response = await User.getUserById(decode.id);
+    const { id } = decode;
+    const response = await User.getUserById(id);
     if (response.rowCount > 0) {
       return res.status(200).json({
         message: "User verified",
@@ -96,23 +96,6 @@ export const signUpUser = async (req: Request, res: Response) => {
 };
 
 export const signOutUser = async (req: Request, res: Response) => {
+  console.log("signout");
   res.clearCookie("token").status(200).json({ message: "User logged out" });
-};
-
-import { CustomRequest } from "../middlewares/authMiddleware";
-
-export const getUserProfile = async (req: CustomRequest, res: Response) => {
-  try {
-    const response = await User.getUserById(req.user.id);
-
-    if (response.rowCount === 0) {
-      return res.status(404).json({
-        message: "User not found",
-      });
-    }
-    res.status(200).json(response);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Server Error");
-  }
 };
